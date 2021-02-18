@@ -1,0 +1,23 @@
+li {
+  float: left;
+  background-color: green;
+  width: 25%;
+}
+
+li a {
+  display: block;
+  padding: 8px;
+  background-color: white;
+}
+
+ul {
+  width: 100%;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+nav {
+  padding-bottom: 10rem;
+}
