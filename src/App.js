@@ -27,10 +27,82 @@ const firestore = firebase.firestore();
 function App() {
   const [whatToShow, setWhatToShow] = useState(<Running/>)
   const [user] = useAuthState(auth)
+  const showRunning = () =>{
+    setWhatToShow(<Running/>)
+  }
+  const showWalking = () => {
+    setWhatToShow(<Walking/>)
+  }
+  const showCycling = () => {
+    setWhatToShow(<Cycling/>)
+  }
+  const showOther = () => {
+    setWhatToShow(<Other/>)
+  }
+
+
+
+  function Running() {
+    const dataRef = firestore.collection('data');
+    const [km, setKm ] = useState("");
+    const [time, setTime ] = useState("");
+    const [weather, setWeather ] = useState("");
+    const [feel, setFeel ] = useState("");
+
+
+
+
+    const sendMessage = async(e) => {
+      e.preventDefault();
+      const {uid, photoURL} = auth.currentUser;
+
+      await dataRef.add({
+        text: km,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        uid,
+        photoURL
+      })
+      setKm("")
+    }
+    return(
+      <>
+
+    <form onSubmit={sendMessage}>
+      <input value={km} placeholder="Mennyit futottál?" onChange={(event) => setKm(event.target.value)}/>
+      <input value={km} placeholder="Mennyi idő alatt?" onChange={(event) => setTime(event.target.value)}/>
+      <input value={km} placeholder="Milyen volt az idő?" onChange={(event) => setWeather(event.target.value)}/>
+      <input value={km} placeholder="Hogy érzed magad? " onChange={(event) => setFeel(event.target.value)}/>
+      <button type="submit" disabled={!km}>Submit</button>
+
+    </form>
+
+
+  {SignOut()}
+      </>
+    )
+  }
+
+  function Walking () {
+    return (
+      <h1>Walking</h1>
+    )
+  }
+
+  function Cycling () {
+    return (
+      <h1>Cycling</h1>
+    )
+  }
+
+  function Other () {
+    return (
+      <h1>Other</h1>
+    )
+  }
 
   return (
     <div className="App">
-      {user? <Navbar/>: null}
+      {user? <Navbar currentItem={whatToShow} other={showOther} walking={showWalking} cycling={showCycling} running={showRunning}/>: null}
       <section>
         {user ? whatToShow : <SignIn/>}
       </section>
@@ -44,6 +116,7 @@ function SignIn() {
   const signInWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider)
+
 
   }
   return (
@@ -66,40 +139,8 @@ function SignOut() {
 
 
 
-function Running() {
-  const dataRef = firestore.collection('data');
-  const [km, setKm ] = useState("");
-  const [time, setTime ] = useState("");
-  const [weather, setWeather ] = useState("");
-  const [feel, setFeel ] = useState("");
-  const sendMessage = async(e) => {
-    e.preventDefault();
-    const {uid, photoURL} = auth.currentUser;
 
-    await dataRef.add({
-      text: km,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      uid,
-      photoURL
-    })
-    setKm("")
-  }
-  return(
-    <>
 
-  <form onSubmit={sendMessage}>
-    <input value={km} placeholder="Mennyit futottál?" onChange={(event) => setKm(event.target.value)}/>
-    <input value={km} placeholder="Mennyi idő alatt?" onChange={(event) => setTime(event.target.value)}/>
-    <input value={km} placeholder="Milyen volt az idő?" onChange={(event) => setWeather(event.target.value)}/>
-    <input value={km} placeholder="Hogy érzed magad? " onChange={(event) => setFeel(event.target.value)}/>
-    <button type="submit" disabled={!km}>Submit</button>
-
-  </form>
-
-{SignOut()}
-    </>
-  )
-}
 
 function AllInformation() {
 const dataRef = firestore.collection('data')

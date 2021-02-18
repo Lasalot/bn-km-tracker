@@ -8,6 +8,21 @@ li a {
   display: block;
   padding: 8px;
   background-color: white;
+  cursor: pointer;
+}
+
+.is-active {
+  font-weight: 900;
+  color: white;
+  background-color: lightcoral;
+  text-decoration-line: underline;
+  text-decoration-thickness: 5px;
+  text-decoration-style: solid;
+}
+
+li :hover {
+  background-color: coral;
+  animation: rotate(90);
 }
 
 ul {
